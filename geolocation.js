@@ -25,7 +25,6 @@ function getLocation(locationData) {
 		coords['latitude'] = latitude;
 		coords['longitude'] = longitude;
 		$url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=500&key=" + $key;
-		locationData($url);
 		/*
 		 $.getScript($url).done(function(data, textStatus, jqxhr) {
 		 locationData(data);
@@ -35,15 +34,31 @@ function getLocation(locationData) {
 		 });*/
 		$.ajax({
 			type : "GET",
-			async : false,
-			url : $url,
+			url : "sample.json",
 			cache : false,
+			crossDomain : true,
 			contentType : "application/json",
-			dataType : "jsonp",
-			jsonpCallback : 'jsonCallback',
+
+			dataType : "json",
+			xhrFields : {
+				onprogress : function(e) {
+					if (e.lengthComputable) {
+						var percent=e.loaded / e.total * 100 + '%';
+						$(".progress-bar").css({
+							width:percent+"%"
+						});
+						// $(".progress-bar").text(percent);
+					}
+				}
+			},
+			// jsonpCallback : 'jsonCallback',
+			error : function(jqXHR, textStatus, errorThrown) {
+				console.log(errorThrown);
+			},
+			success:function(data,textStatus,jqXHR){
+			},
 		}).done(function(data) {
-			var jdata = jQuery.parseJSON(data);
-			locationData(jdata);
+			locationData(data);
 		});
 	}
 
@@ -77,7 +92,7 @@ function getLatLong(geodata) {
 	}
 
 	function error_callback(p) {
-		console.log("get get fail,please try agin.");
+		console.log("location get fail,please try agin.");
 	}
 
 	return resp;

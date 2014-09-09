@@ -1,7 +1,9 @@
 <html>
 	<head>
 		<title>Javascript geo sample</title>
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<script src="//code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
 		<script src="js/geo-min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="geolocation.js"></script>
 		<style type="text/css">
@@ -9,8 +11,9 @@
 				font-family: Helvetica, Arial, sans-serif !important;
 				font-variant: normal;
 				font-weight: normal;
+				font-size: 14px !important;
 				color: #000;
-				
+				padding: 1%;
 			}
 			.button {
 				background: linear-gradient(#59A91B, #4E9916) #59A91B;
@@ -18,67 +21,51 @@
 				color: #fff;
 				border-radius: 4px;
 				padding: .5%;
-				
+			}
+			.progress{
+				height:6px;
 			}
 		</style>
 	</head>
 	<body>
-		<b>Javascript geo sample</b>
 		<script>
-			//
-			// if (geo_position_js.init()) {
-			// geo_position_js.getCurrentPosition(success_callback, error_callback, {
-			// enableHighAccuracy : true
-			// });
-			// } else {
-			// alert("Functionality not available");
-			// }
-			//
-			// function success_callback(p) {
-			// $("#latitude").text(p.coords.latitude.toFixed(4));
-			// $("#longitude").text(p.coords.longitude.toFixed(4));
-			// }
-			//
-			// function error_callback(p) {
-			// alert('error=' + p.message);
-			// }
-			$url="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-1.2591,36.7855&radius=500&key=AIzaSyDbimQ9nDAzirm34TsfcB7nbG8MW4CPqCs";
-			$.ajax({
-			type : "GET",
-			async : false,
-			url : $url,
-			cache : false,
-			crossDomain:true,
-			contentType : "application/json",
-			dataType : "jsonp",
-			jsonpCallback : 'jsonCallback',
-		}).done(function(data,status) {
-			console.log(status);
-		}).error(function(){
-			console.log("error");
-		});
-		
-		function jsonCallBack(data){
-			console.log(data);
-		}
-			getLatLong(function(data) {
-				console.log(data);
+			jQuery(document).ready(function() {
+				$(".button").click(function() {
+					getLocation(function(data) {
+						console.log(data);
+					});
+
+					// getLatLong(function(data) {
+					// console.log(data);
+					// });
+				});
 			});
-			
-			
 
 		</script>
-		<p>
-			Latitude:<span id="latitude"> </span>
-		</p>
-		<p>
-			Longitude:<span id="longitude"> </span>
-		</p>
-		<button class="button">
-			Get Coordinates
-		</button>
-		<div id="demo">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<b>Javascript geo sample</b>
+			</div>
+			<div class="panel-body">
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
 
+					</div>
+				</div>
+				<p>
+					Latitude:<span id="latitude"> </span>
+				</p>
+				<p>
+					Longitude:<span id="longitude"> </span>
+				</p>
+
+				<button class="btn btn-success button" id="locationfetch">
+					Get Coordinates
+				</button>
+				<div id="map">
+
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
