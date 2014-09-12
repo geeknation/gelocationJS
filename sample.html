@@ -1,11 +1,9 @@
 <html>
 	<head>
 		<title>Javascript geo sample</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<script src="//code.jquery.com/jquery-1.7.1.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
-		<script src="js/geo-min.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript" src="geolocation.js"></script>
+
 		<style type="text/css">
 			body {
 				font-family: Helvetica, Arial, sans-serif !important;
@@ -22,50 +20,82 @@
 				border-radius: 4px;
 				padding: .5%;
 			}
-			.progress{
-				height:6px;
+			.progress {
+				height: 6px;
+			}
+			#map {
+				width: inherit;
+				height: 300px;
+			}
+			.panel-heading {
+				overflow: hidden !important;
 			}
 		</style>
 	</head>
 	<body>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<b>Javascript geo sample</b>
+				<!-- button class="btn btn-success button pull-right" id="locationfetch">
+				Get Coordinates
+				</button> -->
+			</div>
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="col-md-7">
+						<!-- <div class="progress">
+						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+
+						</div>
+						</div> -->
+						<p>
+							Latitude:<span id="latitude"> </span>
+						</p>
+						<p>
+							Longitude:<span id="longitude"> </span>
+						</p>
+
+						<div id="map">
+
+						</div>
+
+					</div>
+					<!--end of left-column-->
+					<div class="col-md-3">
+						<h3>Nearby</h3>
+						<hr/>
+						<p id="list">
+							<ol id="place-list"></ol>
+						</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script src="//code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
+		<script src="js/geo-min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDbimQ9nDAzirm34TsfcB7nbG8MW4CPqCs"></script>
+		<script type="text/javascript" src="geolocation.js"></script>
 		<script>
 			jQuery(document).ready(function() {
 				$(".button").click(function() {
-					getLocation(function(data) {
-						console.log(data);
-					});
-
 					// getLatLong(function(data) {
 					// console.log(data);
 					// });
 				});
+
+				getLocation(function(data) {
+					var listElements = '';
+					$.each(data.response.venues, function(index, array) {
+						$("<li></li>").text(array.name).appendTo("#place-list");
+					});
+
+				});
 			});
 
 		</script>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<b>Javascript geo sample</b>
-			</div>
-			<div class="panel-body">
-				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
-
-					</div>
-				</div>
-				<p>
-					Latitude:<span id="latitude"> </span>
-				</p>
-				<p>
-					Longitude:<span id="longitude"> </span>
-				</p>
-
-				<button class="btn btn-success button" id="locationfetch">
-					Get Coordinates
-				</button>
-				<div id="map">
-
-				</div>
-			</div>
-		</div>
 	</body>
 </html>

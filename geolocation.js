@@ -21,45 +21,63 @@ function getLocation(locationData) {
 		//geo_position_js.showMap(p.coords.latitude, p.coords.longitude);
 		var latitude = p.coords.latitude.toFixed(4);
 		var longitude = p.coords.longitude.toFixed(4);
-		var coords = new Array();
-		coords['latitude'] = latitude;
-		coords['longitude'] = longitude;
-		$url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=500&key=" + $key;
 		/*
-		 $.getScript($url).done(function(data, textStatus, jqxhr) {
-		 locationData(data);
+		 var coords = new Array();
 
-		 }).fail(function() {
+		 coords['latitude'] = latitude;
+		 coords['longitude'] = longitude;*/
 
-		 });*/
+		$("#latitude").text(latitude);
+		$("#longitude").text(longitude);
+		map = new google.maps.Map(document.getElementById('map'), {
+			center : new google.maps.LatLng(latitude, longitude),
+			zoom : 15
+		});
+		var coordsLock = new google.maps.LatLng(latitude, longitude);
+
+		$url = "https://api.foursquare.com/v2/venues/search?client_id=V5HDIRMHEKCZLHAKI4P134CN2D4NW2IX2SWBKBLVQ13HATMA&client_secret=PYUMHBMECBFV25JTIWU4ZEFDK2IIVOWDEDO5ED4G0YZQ2MY3&v=20130815&ll=" + coordsLock.toUrlValue(4);
 		$.ajax({
 			type : "GET",
-			url : "sample.json",
+			url : $url,
 			cache : false,
 			crossDomain : true,
 			contentType : "application/json",
-
-			dataType : "json",
+			dataType : "jsonp",
 			xhrFields : {
 				onprogress : function(e) {
 					if (e.lengthComputable) {
-						var percent=e.loaded / e.total * 100 + '%';
+						var percent = e.loaded / e.total * 100 + '%';
 						$(".progress-bar").css({
-							width:percent+"%"
+							width : percent + "%"
 						});
 						// $(".progress-bar").text(percent);
 					}
 				}
 			},
-			// jsonpCallback : 'jsonCallback',
 			error : function(jqXHR, textStatus, errorThrown) {
-				console.log(errorThrown);
+				locationData(errorThrown);
 			},
-			success:function(data,textStatus,jqXHR){
-			},
-		}).done(function(data) {
-			locationData(data);
+			success : function(data, textStatus, jqXHR) {
+				locationData(data);
+			}
 		});
+
+		/*
+		 div = document.getElementById("map");
+		 var request = {
+		 location : [coordsLock.lat(), coordsLock.lng()],
+		 radius : "500"
+		 };
+
+		 service = new google.maps.places.PlacesService(map);
+		 service.nearbySearch(request, renderResults); */
+
+		function renderResults(results, callBackStatus) {
+			for (var i = 0, result; result = results[i]; i++) {
+				console.log(result);
+			}
+		}
+
 	}
 
 	function error_callback(p) {
@@ -98,3 +116,44 @@ function getLatLong(geodata) {
 	return resp;
 }
 
+/*
+ *
+ $url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=500&key=" + $key;
+ $.getScript($url).done(function(data, textStatus, jqxhr) {
+ locationData(data);
+
+ }).fail(function() {
+
+ });
+ $.ajax({
+ type : "GET",
+ url : $url,
+ cache : false,
+ crossDomain : true,
+ contentType : "application/json",
+ dataType : "jsonp",
+ xhrFields : {
+ onprogress : function(e) {
+ if (e.lengthComputable) {
+ var percent = e.loaded / e.total * 100 + '%';
+ $(".progress-bar").css({
+ width : percent + "%"
+ });
+ // $(".progress-bar").text(percent);
+ }
+ }
+ },
+ jsonpCallback : 'jsonCallback',
+
+ error : function(jqXHR, textStatus, errorThrown) {
+ console.log(errorThrown);
+ },
+ success : function(data, textStatus, jqXHR) {
+
+ for ( i = 0; i < data.results.length; i++) {
+ myAddress[i] = data.results[i].formatted_address;
+ locationData(myAddress[i]);
+ }
+ }
+ });
+ * */
