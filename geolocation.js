@@ -21,11 +21,12 @@ function getLocation(locationData) {
 		//geo_position_js.showMap(p.coords.latitude, p.coords.longitude);
 		var latitude = p.coords.latitude.toFixed(4);
 		var longitude = p.coords.longitude.toFixed(4);
+		
 		/*
 		 var coords = new Array();
-
 		 coords['latitude'] = latitude;
-		 coords['longitude'] = longitude;*/
+		 coords['longitude'] = longitude;
+		 */
 
 		$("#latitude").text(latitude);
 		$("#longitude").text(longitude);
@@ -110,7 +111,7 @@ function getLatLong(geodata) {
 	}
 
 	function error_callback(p) {
-		console.log("location get fail,please try agin.");
+		console.log("location get fail,please try again...");
 	}
 
 	return resp;
@@ -118,6 +119,7 @@ function getLatLong(geodata) {
 
 /*
  *
+ * 
  $url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=500&key=" + $key;
  $.getScript($url).done(function(data, textStatus, jqxhr) {
  locationData(data);
